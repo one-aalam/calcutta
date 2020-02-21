@@ -32,11 +32,10 @@
 	}
 </style>
 <script>
-	import Video from '../components/Video.svelte';
+	import Month from '../components/Month.svelte';
 </script>
 
 <svelte:head>
 	<title>Sapper project template</title>
 </svelte:head>
-
-<Video src={"gone.mp4"}/>
+<Month />
