@@ -1,5 +1,7 @@
 <script>
-    import { eachDayOfInterval, getDaysInMonth, getMonth, getYear, startOfMonth, endOfMonth, getDate, getDay, isToday,isBefore, addMonths, subMonths, addDays, subDays, format } from 'date-fns';
+    import Dialog from './Dialog.svelte';
+    let showModal = false;
+    import { eachDayOfInterval, getDaysInMonth, getMonth, getYear, startOfMonth, endOfMonth, getDate, getDay, isToday,isBefore, addMonths, subMonths, addDays, subDays } from 'date-fns';
     import locale from 'date-fns/esm/locale/en-US';
     const weekdays = [...Array(7).keys()].map(i => locale.localize.day(i, { width: 'abbreviated' }))
 
@@ -50,6 +52,10 @@
         date = addMonths(date, 1)
     }
 
+    function showDialog() {
+        showModal = !showModal
+    }
+
 </script>
 
 <main>
@@ -67,7 +73,9 @@
             <li
                 class="cal__date {isToday(day) ? 'cal__date--today' : ''}
                     {isBefore(day, _date) ? 'cal__date-prev' : ''}"
-                    data-value={day}>
+                    data-value={day}
+                on:click={showDialog}
+            >
                         {getDate(day)}
             </li>
         {/each}
@@ -75,6 +83,12 @@
                 <li class="cal__date cal__date--prev-month" data-value={day}>{getDate(day)}</li>
             {/each}
     </ul>
+
+    <Dialog show={showModal}>
+        <div>
+
+        </div>
+    </Dialog>
 </main>
 <style>
     ul.cal {
