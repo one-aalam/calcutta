@@ -1,15 +1,7 @@
 <script>
     import { eachDayOfInterval, getDaysInMonth, getMonth, getYear, startOfMonth, endOfMonth, getDate, getDay, isToday,isBefore, addMonths, subMonths, addDays, subDays, format } from 'date-fns';
-
-    const days = [
-        "Sun",
-        "Mon",
-        "Tue",
-        "Wed",
-        "Thu",
-        "Fri",
-        "Sat"
-    ];
+    import locale from 'date-fns/esm/locale/en-US';
+    const weekdays = [...Array(7).keys()].map(i => locale.localize.day(i, { width: 'abbreviated' }))
 
     const _date = new Date(); // non-mutable version of the date, kept for checks like isPrevious, isToday
 
@@ -23,6 +15,7 @@
 
 
     $: month = getMonth(date);
+    $: monthName = locale.localize.month(month);
     $: prevMonth = getMonth(prevMonthDate);
     $: nextMonth = getMonth(nextMonthDate);
 
@@ -60,9 +53,9 @@
 </script>
 
 <main>
-    <button on:click={prev}>Prev</button>{format(date, 'MMMM')} {year} <button on:click={next}>next</button>
+    <button on:click={prev}>Prev</button>{monthName} {year} <button on:click={next}>next</button>
     <ul class="cal">
-        {#each days as dayOfWeek}
+        {#each weekdays as dayOfWeek}
             <li class="cal__date">{dayOfWeek}</li>
         {/each}
     </ul>
