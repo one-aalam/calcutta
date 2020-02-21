@@ -1,5 +1,5 @@
 <script>
-    import { eachDayOfInterval, getDaysInMonth, getMonth, getYear, startOfMonth, endOfMonth, getDate, isToday,isBefore, addMonths, subMonths } from 'date-fns';
+    import { eachDayOfInterval, getDaysInMonth, getMonth, getYear, startOfMonth, endOfMonth, getDate, getDay, isToday,isBefore, addMonths, subMonths, addDays, subDays } from 'date-fns';
     const months = [
         'January',
         'February',
@@ -29,6 +29,11 @@
     let date = new Date(); // mutable version of the date
     $: prevMonthDate = subMonths(date, 1);
     $: nextMonthDate = addMonths(date, 1);
+    $: prevMonthEndDate = endOfMonth(prevMonthDate);
+    $: startOfCurrMonth = startOfMonth(date);
+    $: endOfCurrMonth = endOfMonth(date);
+    $: nextMonthStartDate = startOfMonth(nextMonthDate);
+
 
     $: month = getMonth(date);
     $: prevMonth = getMonth(prevMonthDate);
@@ -39,19 +44,23 @@
     $: nextYear = getYear(nextMonthDate);
 
     $: daysInCurrMonth = getDaysInMonth(date);
-    $: startOfCurrMonth = startOfMonth(date);
-    $: endOfCurrMonth = endOfMonth(date);
+
     $: eachDayOfCurrMonth = eachDayOfInterval({
         start: new Date(year, month, 1),
         end: new Date(year, month, daysInCurrMonth)
     });
-    // $: daysToPadLeftInCurrMonth = getDay(startOfCurrMonth);
+    $: daysToPadLeftInCurrMonth = getDay(startOfCurrMonth);
+    $: daysToPadRightInCurrMonth = 6 - getDay(endOfCurrMonth);
 
-    // $: daysInPrevMonth = getDaysInMonth(prevMonth);
-    // $: paddableDaysOfPrevMonth = eachDayOfInterval({
-    //     start: new Date(prevYear, prevMonth, daysInPrevMonth - daysToPadLeftInCurrMonth + 1),
-    //     end: new Date(prevYear, prevMonth, daysInPrevMonth)
-    // });
+    $: daysInPrevMonth = getDaysInMonth(prevMonthDate);
+    $: paddableDaysOfPrevMonth = daysToPadLeftInCurrMonth > 0 ? eachDayOfInterval({
+        start:  subDays(prevMonthEndDate, daysToPadLeftInCurrMonth - 1),
+        end: prevMonthEndDate
+    }): [];
+    $: paddableDaysOfNextMonth = daysToPadRightInCurrMonth > 0 && daysToPadRightInCurrMonth <= 6 ?  eachDayOfInterval({
+        start:  nextMonthStartDate,
+        end: addDays(nextMonthStartDate, daysToPadRightInCurrMonth - 1)
+    }): [];
 
     function prev() {
         date = subMonths(date, 1)
@@ -71,9 +80,9 @@
         {/each}
     </ul>
     <ul class="cal">
-        <!-- {#each paddableDaysOfPrevMonth as day}
-            <li class="cal__date" data-value={day}>{getDate(day)}</li>
-        {/each} -->
+            {#each paddableDaysOfPrevMonth as day}
+                <li class="cal__date cal__date--prev-month" data-value={day}>{getDate(day)}</li>
+            {/each}
         {#each eachDayOfCurrMonth as day}
             <li
                 class="cal__date {isToday(day) ? 'cal__date--today' : ''}
@@ -82,6 +91,9 @@
                         {getDate(day)}
             </li>
         {/each}
+                    {#each paddableDaysOfNextMonth as day}
+                <li class="cal__date cal__date--prev-month" data-value={day}>{getDate(day)}</li>
+            {/each}
     </ul>
 </main>
 <style>
@@ -95,6 +107,11 @@
     }
     .cal__date-prev {
         color: darkgrey;
+    }
+    .cal__date--prev-month {
+        color: lightgrey;
+        font-style: italic;
+        font-weight: 300;
     }
     .cal__date--today {
         font-weight: 700;
