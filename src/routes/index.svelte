@@ -37,7 +37,7 @@
 </script>
 
 <svelte:head>
-	<title>Sapper project template</title>
+	<title>Calcutta - Just a nifty li'l calendar App</title>
 </svelte:head>
 <TailwindCSS />
 <Month />

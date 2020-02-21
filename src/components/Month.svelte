@@ -1,5 +1,5 @@
 <script>
-    import { eachDayOfInterval, getDaysInMonth, getMonth, getYear, startOfMonth, endOfMonth, getDate, isToday,isBefore, getDay, addMonths, subMonths } from 'date-fns';
+    import { eachDayOfInterval, getDaysInMonth, getMonth, getYear, startOfMonth, endOfMonth, getDate, isToday,isBefore, addMonths, subMonths } from 'date-fns';
     const months = [
         'January',
         'February',
@@ -23,7 +23,10 @@
         "Fri",
         "Sat"
     ];
-    let date = new Date();
+
+    const _date = new Date(); // non-mutable version of the date, kept for checks like isPrevious, isToday
+
+    let date = new Date(); // mutable version of the date
     $: prevMonthDate = subMonths(date, 1);
     $: nextMonthDate = addMonths(date, 1);
 
@@ -72,7 +75,12 @@
             <li class="cal__date" data-value={day}>{getDate(day)}</li>
         {/each} -->
         {#each eachDayOfCurrMonth as day}
-            <li class="cal__date {isToday(day) ? 'cal__date--today' : ''} {isBefore(day, date) ? 'cal__date-prev' : ''}" data-value={day}>{getDate(day)}</li>
+            <li
+                class="cal__date {isToday(day) ? 'cal__date--today' : ''}
+                    {isBefore(day, _date) ? 'cal__date-prev' : ''}"
+                    data-value={day}>
+                        {getDate(day)}
+            </li>
         {/each}
     </ul>
 </main>
