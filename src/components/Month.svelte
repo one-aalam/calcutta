@@ -1,6 +1,10 @@
 <script>
+    import { onDestroy } from 'svelte';
     import Dialog from './Dialog.svelte';
     import Thing from './Thing.svelte';
+    import { createCalStore } from '../store';
+
+    const calStore = createCalStore([]);
     let showModal = false;
     import { eachDayOfInterval, getDaysInMonth, getMonth, getYear, startOfMonth, endOfMonth, getDate, getDay, isToday,isBefore, addMonths, subMonths, addDays, subDays, getTime } from 'date-fns';
     import locale from 'date-fns/esm/locale/en-US';
@@ -58,6 +62,17 @@
         showModal = !showModal
     }
 
+    function onAdded(e) {
+        showModal = !showModal
+        calStore.add({
+            key: e.detail.time,
+            text: e.detail.text
+        });
+    }
+
+    const unsub = calStore.subscribe(val => console.log(val));
+    onDestroy(unsub);
+
 </script>
 
 <main>
@@ -88,7 +103,7 @@
 
     <Dialog show={showModal}>
         <div>
-            <Thing {forDate} />
+            <Thing {forDate} on:added={onAdded} />
         </div>
     </Dialog>
 </main>
