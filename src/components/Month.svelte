@@ -1,19 +1,6 @@
 <script>
-    import { eachDayOfInterval, getDaysInMonth, getMonth, getYear, startOfMonth, endOfMonth, getDate, getDay, isToday,isBefore, addMonths, subMonths, addDays, subDays } from 'date-fns';
-    const months = [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December'
-    ];
+    import { eachDayOfInterval, getDaysInMonth, getMonth, getYear, startOfMonth, endOfMonth, getDate, getDay, isToday,isBefore, addMonths, subMonths, addDays, subDays, format } from 'date-fns';
+
     const days = [
         "Sun",
         "Mon",
@@ -73,7 +60,7 @@
 </script>
 
 <main>
-    <button on:click={prev}>Prev</button>{months[month]} {year} <button on:click={next}>next</button>
+    <button on:click={prev}>Prev</button>{format(date, 'MMMM')} {year} <button on:click={next}>next</button>
     <ul class="cal">
         {#each days as dayOfWeek}
             <li class="cal__date">{dayOfWeek}</li>
