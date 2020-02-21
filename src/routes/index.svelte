@@ -32,10 +32,12 @@
 	}
 </style>
 <script>
+	import TailwindCSS from '../components/TailwindCSS.svelte';
 	import Month from '../components/Month.svelte';
 </script>
 
 <svelte:head>
 	<title>Sapper project template</title>
 </svelte:head>
+<TailwindCSS />
 <Month />
