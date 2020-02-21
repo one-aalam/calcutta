@@ -1,7 +1,8 @@
 <script>
     import Dialog from './Dialog.svelte';
+    import Thing from './Thing.svelte';
     let showModal = false;
-    import { eachDayOfInterval, getDaysInMonth, getMonth, getYear, startOfMonth, endOfMonth, getDate, getDay, isToday,isBefore, addMonths, subMonths, addDays, subDays } from 'date-fns';
+    import { eachDayOfInterval, getDaysInMonth, getMonth, getYear, startOfMonth, endOfMonth, getDate, getDay, isToday,isBefore, addMonths, subMonths, addDays, subDays, getTime } from 'date-fns';
     import locale from 'date-fns/esm/locale/en-US';
     const weekdays = [...Array(7).keys()].map(i => locale.localize.day(i, { width: 'abbreviated' }))
 
@@ -51,8 +52,9 @@
     function next() {
         date = addMonths(date, 1)
     }
-
-    function showDialog() {
+    let forDate;
+    function showDialog(date) {
+        forDate = date;
         showModal = !showModal
     }
 
@@ -74,7 +76,7 @@
                 class="cal__date {isToday(day) ? 'cal__date--today' : ''}
                     {isBefore(day, _date) ? 'cal__date-prev' : ''}"
                     data-value={day}
-                on:click={showDialog}
+                on:click={() => showDialog(day)}
             >
                         {getDate(day)}
             </li>
@@ -86,7 +88,7 @@
 
     <Dialog show={showModal}>
         <div>
-
+            <Thing {forDate} />
         </div>
     </Dialog>
 </main>
