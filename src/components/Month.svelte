@@ -59,6 +59,8 @@
     function next() {
         date = addMonths(date, 1)
     }
+
+
     let forDate;
     function showDialog(date) {
         forDate = date;
@@ -76,10 +78,8 @@
 </script>
 
 <main>
+    <!-- Month: Header -->
     <div class="header flex flex-row p-8">
-        <!-- <button class="w-16 h-16 text-white outline-none border-none focus:outline-none shadow-xl rounded-full transition duration-500 ease-in-out" on:click={backward5}>
-            <Icon icon={faBackward} class="o"></Icon>
-        </button> -->
         <div class="col flex-1 justify-center self-center text-left">
             <button class="text-3xl text-indigo-300 hover:text-indigo-400" on:click={prev}>
                 <Icon icon={faArrowCircleLeft} class="o"></Icon>
@@ -95,12 +95,14 @@
         </div>
     </div>
 
-    <div class="cal">
+    <!-- Month: Day Headings-->
+    <div class="grid grid-cols-7">
         {#each weekdays as dayOfWeek}
-            <div class="cal__date w-12 h-12 font-bold">{dayOfWeek}</div>
+            <div class="cal__date w-16 h-12 flex justify-center content-center font-bold">{dayOfWeek}</div>
         {/each}
     </div>
-    <div class="cal">
+    <!-- Month: Day -->
+    <div class="grid grid-cols-7">
             {#each paddableDaysOfPrevMonth as day}
                 <Day {day} hint={true} />
             {/each}
@@ -111,16 +113,9 @@
                 <Day {day} hint={true} />
             {/each}
     </div>
+
+    <!-- Month: Create Event Modal -->
     <Modal show={showModal} title={'Add an Event'}>
          <CreateEvent {forDate} on:added={onAdded} on:dismiss={() => showModal = !showModal} />
     </Modal>
 </main>
-<style>
-    .cal {
-        display: grid;
-        grid-template-columns: repeat(
-            7,
-            1fr
-        );
-    }
-</style>
