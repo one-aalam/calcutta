@@ -1,7 +1,10 @@
 <script>
     import { onDestroy } from 'svelte';
+    import Icon from 'fa-svelte';
+    import { faArrowCircleRight, faArrowCircleLeft } from '@fortawesome/free-solid-svg-icons';
     import Dialog from './Dialog.svelte';
     import Thing from './Thing.svelte';
+    import Day from './Day.svelte';
     import { createCalStore } from '../store';
 
     const calStore = createCalStore([]);
@@ -76,30 +79,41 @@
 </script>
 
 <main>
-    <button on:click={prev}>Prev</button>{monthName} {year} <button on:click={next}>next</button>
-    <ul class="cal">
+    <div class="header flex flex-row p-8">
+        <!-- <button class="w-16 h-16 text-white outline-none border-none focus:outline-none shadow-xl rounded-full transition duration-500 ease-in-out" on:click={backward5}>
+            <Icon icon={faBackward} class="o"></Icon>
+        </button> -->
+        <div class="col flex-1 justify-center self-center text-left">
+            <button class="text-3xl text-indigo-300 hover:text-indigo-400" on:click={prev}>
+                <Icon icon={faArrowCircleLeft} class="o"></Icon>
+            </button>
+        </div>
+        <div class="col flex-1 text-3xl">
+            {monthName}&nbsp;<span class="normal text-gray-600">{year}</span>
+        </div>
+        <div class="col flex-1 justify-center self-center text-right">
+            <button class="text-3xl text-indigo-300 hover:text-indigo-400" on:click={next}>
+                <Icon icon={faArrowCircleRight} class="o"></Icon>
+            </button>
+        </div>
+    </div>
+
+    <div class="cal">
         {#each weekdays as dayOfWeek}
-            <li class="cal__date">{dayOfWeek}</li>
+            <div class="cal__date w-12 h-12 font-bold">{dayOfWeek}</div>
         {/each}
-    </ul>
-    <ul class="cal">
+    </div>
+    <div class="cal">
             {#each paddableDaysOfPrevMonth as day}
-                <li class="cal__date cal__date--prev-month" data-value={day}>{getDate(day)}</li>
+                <Day {day} hint={true} />
             {/each}
-        {#each eachDayOfCurrMonth as day}
-            <li
-                class="cal__date {isToday(day) ? 'cal__date--today' : ''}
-                    {isBefore(day, _date) ? 'cal__date-prev' : ''}"
-                    data-value={day}
-                on:click={() => showDialog(day)}
-            >
-                        {getDate(day)}
-            </li>
-        {/each}
-                    {#each paddableDaysOfNextMonth as day}
-                <li class="cal__date cal__date--prev-month" data-value={day}>{getDate(day)}</li>
+            {#each eachDayOfCurrMonth as day}
+                <Day {day} today={_date} on:click={() => showDialog(day)} />
             {/each}
-    </ul>
+            {#each paddableDaysOfNextMonth as day}
+                <Day {day} hint={true} />
+            {/each}
+    </div>
 
     <Dialog show={showModal}>
         <div>
@@ -108,24 +122,11 @@
     </Dialog>
 </main>
 <style>
-    ul.cal {
-        list-style: none;
+    .cal {
         display: grid;
         grid-template-columns: repeat(
             7,
             1fr
         );
-    }
-    .cal__date-prev {
-        color: darkgrey;
-    }
-    .cal__date--prev-month {
-        color: lightgrey;
-        font-style: italic;
-        font-weight: 300;
-    }
-    .cal__date--today {
-        font-weight: 700;
-        color: black;
     }
 </style>

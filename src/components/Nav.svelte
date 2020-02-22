@@ -49,12 +49,13 @@
 </style>
 
 <nav>
+	<h1 class="text-4xl p-4 flex justify-center align-center uppercase"><strong class="text-indigo-600">Cal</strong>cutta<strong class="text-indigo-600">!</strong></h1>
 	<ul>
-		<li><a class:selected='{segment === undefined}' href='.'>home</a></li>
-		<li><a class:selected='{segment === "about"}' href='about'>about</a></li>
+		<!-- <li><a class:selected='{segment === undefined}' href='.'>home</a></li>
+		<li><a class:selected='{segment === "about"}' href='about'>about</a></li> -->
 
 		<!-- for the blog link, we're using rel=prefetch so that Sapper prefetches
 		     the blog data when we hover over the link or tap it on a touchscreen -->
-		<li><a rel=prefetch class:selected='{segment === "blog"}' href='blog'>blog</a></li>
+		<!-- <li><a rel=prefetch class:selected='{segment === "blog"}' href='blog'>blog</a></li> -->
 	</ul>
 </nav>
