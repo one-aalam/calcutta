@@ -2,7 +2,6 @@
     import { onDestroy } from 'svelte';
     import Icon from 'fa-svelte';
     import { faArrowCircleRight, faArrowCircleLeft } from '@fortawesome/free-solid-svg-icons';
-    import Dialog from './Dialog.svelte';
     import Modal from './Modal.svelte';
     import CreateEvent from './CreateEvent.svelte';
     import Day from './Day.svelte';
