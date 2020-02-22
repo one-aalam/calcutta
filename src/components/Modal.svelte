@@ -16,7 +16,7 @@
 
     function onKeydown(event) {
         if (event.keyCode === 27) {
-            this.closeDialog();
+            show = !show;
         }
     }
     $: {
@@ -57,6 +57,7 @@
         </div>
     </div>
 </div>
+<svelte:body on:keydown={onKeydown} />
 <style>
     .modal {
       transition: opacity 0.25s ease;
