@@ -3,7 +3,8 @@
     import Icon from 'fa-svelte';
     import { faArrowCircleRight, faArrowCircleLeft } from '@fortawesome/free-solid-svg-icons';
     import Dialog from './Dialog.svelte';
-    import Thing from './Thing.svelte';
+    import Modal from './Modal.svelte';
+    import CreateEvent from './CreateEvent.svelte';
     import Day from './Day.svelte';
     import { createCalStore } from '../store';
 
@@ -67,10 +68,7 @@
 
     function onAdded(e) {
         showModal = !showModal
-        calStore.add({
-            key: e.detail.time,
-            text: e.detail.text
-        });
+        calStore.add(e.detail);
     }
 
     const unsub = calStore.subscribe(val => console.log(val));
@@ -108,18 +106,15 @@
                 <Day {day} hint={true} />
             {/each}
             {#each eachDayOfCurrMonth as day}
-                <Day {day} today={_date} on:click={() => showDialog(day)} />
+                <Day {day} today={_date} on:click={(evt) => showDialog(day, evt)} />
             {/each}
             {#each paddableDaysOfNextMonth as day}
                 <Day {day} hint={true} />
             {/each}
     </div>
-
-    <Dialog show={showModal}>
-        <div>
-            <Thing {forDate} on:added={onAdded} />
-        </div>
-    </Dialog>
+    <Modal show={showModal} title={'Add an Event'}>
+         <CreateEvent {forDate} on:added={onAdded} on:dismiss={() => showModal = !showModal} />
+    </Modal>
 </main>
 <style>
     .cal {
