@@ -1,7 +1,7 @@
 <script>
     import { onDestroy } from 'svelte';
     import Icon from 'fa-svelte';
-    import { faArrowCircleRight, faArrowCircleLeft } from '@fortawesome/free-solid-svg-icons';
+    import { faArrowCircleRight, faArrowCircleLeft, faCalendarDay, faClock } from '@fortawesome/free-solid-svg-icons';
     import Modal from './Modal.svelte';
     import CreateEvent from './CreateEvent.svelte';
     import Day from './Day.svelte';
@@ -9,7 +9,7 @@
 
     const calStore = createCalStore([]);
     let showModal = false;
-    import { eachDayOfInterval, getDaysInMonth, getMonth, getYear, startOfMonth, endOfMonth, getDate, getDay, isToday,isBefore, addMonths, subMonths, addDays, subDays, getTime } from 'date-fns';
+    import { eachDayOfInterval, getDaysInMonth, getMonth, getYear, startOfMonth, endOfMonth, getDate, getDay, isToday,isBefore, addMonths, subMonths, addDays, subDays, getTime, format } from 'date-fns';
     import locale from 'date-fns/esm/locale/en-US';
     const weekdays = [...Array(7).keys()].map(i => locale.localize.day(i, { width: 'abbreviated' }))
 
@@ -71,13 +71,14 @@
         showModal = !showModal
         calStore.add(e.detail);
     }
-
-    const unsub = calStore.subscribe(val => console.log(val));
+    let events;
+    const unsub = calStore.subscribe(val => events = val);
     onDestroy(unsub);
 
 </script>
 
-<main>
+<div class="main grid max-w-6xl grid-cols-1 lg:grid-cols-3">
+<main class="bg-white p-8 max-w-4xl col-span-1 lg:col-span-2 shadow-xl rounded-sm">
     <!-- Month: Header -->
     <div class="header flex flex-row p-8">
         <div class="col flex-1 justify-center self-center text-left">
@@ -119,3 +120,20 @@
          <CreateEvent {forDate} on:added={onAdded} on:dismiss={() => showModal = !showModal} />
     </Modal>
 </main>
+<aside class="max-w-xs col-span-3 lg:col-span-1 flex flex-row lg:flex-col overflow-x-scroll pt-2 lg:pl-2">
+    <p class="text-2xl font-semibold"> <Icon icon={faCalendarDay} />  Events</p>
+    {#if events}
+        {#each events as event}
+            <div class="w-32 h-20 bg-gray-400 rounded-sm border-gray-300 p-4 lg:w-full mr-2 lg:mr-0 lg:mb-2">
+                <h4 class="font-medium"><Icon icon={faClock} />{event.title}</h4>
+                <h6>{event.detail.start && format(event.detail.start, 'EEEE, do MMM')}</h6>
+            </div>
+        {/each}
+    {:else}
+        <div class="flex justify-center content-center">
+            No events added yet! Please add the first event for...
+        </div>
+    {/if}
+
+</aside>
+</div>
